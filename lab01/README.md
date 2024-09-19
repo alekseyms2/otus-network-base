@@ -7,7 +7,7 @@
 ### Таблица адресации
 
 | Устройство  | Интерфейс   | IP-адрес / префикс  |
-| ---------- :|: --------- :|: ------------------ |
+|----------:|:---------:|:------------------|
 | S1          | VLAN 1      | 192.168.1.2/24      |
 | PC-A        | NIC         | 192.168.1.10/24     |
 
@@ -30,10 +30,251 @@
 
 ### Часть 1. Создание сети и проверка настроек коммутатора по умолчанию
 
-Шаг 1. Создать сеть согласно топологии.
+### Шаг 1. Создать сеть согласно топологии.
 
-	* Подсоденить консольный кабель
+##### Подсоденить консольный кабель
 	
-	![](lab01-topology.png)
+![](lab01-topology.png)
 	
-Шаг 2. 	
+##### Установить консольное подключение к коммутатору
+
+- На компьютере открыть терминал
+
+![](terminal.png)
+
+-  Определить параметры подключения
+
+![](terminal-options.png)
+
+- Вывод консоли
+
+```
+Switch Ports Model              SW Version            SW Image
+------ ----- -----              ----------            ----------
+*    1 26    WS-C2960-24TT-L    15.0(2)SE4            C2960-LANBASEK9-M
+
+Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE4, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2013 by Cisco Systems, Inc.
+Compiled Wed 26-Jun-13 02:49 by mnguyen
+
+
+
+Press RETURN to get started!
+
+
+%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+%LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+
+Switch>
+```
+
+### Шаг 2. Проверьте настройки коммутатора по умолчанию.
+
+Войти в привилегированный режим EXEC с помощью команды `enable`
+
+Выполнить команду show running-config
+
+```
+Switch#show run
+Building configuration...
+
+Current configuration : 1080 bytes
+!
+version 15.0
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Switch
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+
+
+Switch#
+```
+
+b.	Изучите текущий файл running configuration.
+
+Сколько интерфейсов FastEthernet имеется на коммутаторе 2960? - `24`
+
+Сколько интерфейсов Gigabit Ethernet имеется на коммутаторе 2960? - `2`
+
+Каков диапазон значений, отображаемых в vty-линиях? - `16`
+
+c.	Изучите файл загрузочной конфигурации (startup configuration), который содержится в энергонезависимом ОЗУ (NVRAM).
+Вопрос:
+Почему появляется это сообщение? - Потому что файл конфигурации не сохранен в энергонезависимую память (NVRAM) и в настоящее время находиться в оперативной памяти.
+
+
+d.	Изучите характеристики SVI для VLAN 1.
+
+Назначен ли IP-адрес сети VLAN 1? - IP-адрес сети VLAN 1 не назначен.  
+Какой MAC-адрес имеет SVI? Возможны различные варианты ответов. - 0060.47e1.227c.  
+Данный интерфейс включен? - Данный интерфейс выключен.  
+
+Вывод консоли [здесь](output-cons/p1-s2-d.txt)
+
+e.	Изучите IP-свойства интерфейса SVI сети VLAN 1.  
+Какие выходные данные вы видите?
+
+Вывод консоли:
+
+```
+Switch#show ip interface vlan 1
+Vlan1 is administratively down, line protocol is down
+  Internet protocol processing disabled
+```
+
+f.	Подсоедините кабель Ethernet компьютера PC-A к порту 6 на коммутаторе и изучите IP-свойства интерфейса SVI сети VLAN 1. Дождитесь согласования параметров скорости и дуплекса между коммутатором и ПК. 
+
+Какие выходные данные вы видите?
+
+```
+Switch#show interfaces vlan 1
+Vlan1 is administratively down, line protocol is down
+  Hardware is CPU Interface, address is 0060.47e1.227c (bia 0060.47e1.227c)
+  MTU 1500 bytes, BW 100000 Kbit, DLY 1000000 usec,
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 21:40:21, output never, output hang never
+  Last clearing of "show interface" counters never
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/40 (size/max)
+  5 minute input rate 0 bits/sec, 0 packets/sec
+  5 minute output rate 0 bits/sec, 0 packets/sec
+     1682 packets input, 530955 bytes, 0 no buffer
+     Received 0 broadcasts (0 IP multicast)
+     0 runts, 0 giants, 0 throttles
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     563859 packets output, 0 bytes, 0 underruns
+     0 output errors, 23 interface resets
+     0 output buffer failures, 0 output buffers swapped out
+```
+
+g.	Изучите сведения о версии ОС Cisco IOS на коммутаторе.   
+
+Под управлением какой версии ОС Cisco IOS работает коммутатор? - Version 15.0(2)SE4.  
+Как называется файл образа системы? - c2960-lanbasek9-mz.150-2.SE4.bin.  
+
+Вывод консоли [здесь](output-cons/p1-s2-g.txt)
+h.	Изучите свойства по умолчанию интерфейса FastEthernet, который используется компьютером PC-A.  
+Switch# show interface f0/6  
+ 
+Интерфейс включен или выключен? - Интерфейс включен.  
+Что нужно сделать, чтобы включить интерфейс? - no shutdown.  
+Какой MAC-адрес у интерфейса? - 0060.5c44.b406.  
+Какие настройки скорости и дуплекса заданы в интерфейсе? - Full-duplex, 100Mb/s.  
+
+Вывод консоли [здесь](output-cons/p1-s2-h.txt)
+
+i.	Изучите флеш-память.  
+Выполните одну из следующих команд, чтобы изучить содержимое флеш-каталога.  
+Switch# show flash  
+Switch# dir flash:  
+В конце имени файла указано расширение, например .bin. Каталоги не имеют расширения файла.
+
+Какое имя присвоено образу Cisco IOS? - 2960-lanbasek9-mz.150-2.SE4.bin
+
+	Switch#show flash
+	Directory of flash:/
+
+    1  -rw-     4670455          <no date>  2960-lanbasek9-mz.150-2.SE4.bin
+
+	64016384 bytes total (59345929 bytes free) 
+
+================================
+
+	Switch#dir flash: 
+	Directory of flash:/
+
+    1  -rw-     4670455          <no date>  2960-lanbasek9-mz.150-2.SE4.bin
+
+	64016384 bytes total (59345929 bytes free)
+
+
