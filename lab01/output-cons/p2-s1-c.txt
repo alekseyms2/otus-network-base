@@ -1,0 +1,18 @@
+conf t
+!
+service password-encryption
+!
+hostname S1
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+no ip domain-lookup
+!
+!
+!
+banner motd ^C
+
+Unauthorized access is strictly prohibited. ^C
+!
