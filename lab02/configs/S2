@@ -1,0 +1,26 @@
+conf t
+!
+service password-encryption
+!
+hostname S2
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+interface Vlan1
+ ip address 192.168.1.12 255.255.255.0
+ no shutdown
+ exit
+!
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+ exit
+!
+line vty 0 4
+ password 7 0822455D0A16
+ logging synchronous
+ login
+ transport input telnet
+ exit
+!
