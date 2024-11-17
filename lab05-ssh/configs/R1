@@ -1,0 +1,36 @@
+conf t
+!
+service password-encryption
+!
+hostname R1
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+username sshadmin privilege 15 secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+ip ssh version 2
+no ip domain-lookup
+ip domain-name otus.ru
+!
+crypto key generate rsa general-keys modulus 2048
+!
+interface GigabitEthernet0/0
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+ exit
+!
+banner motd ^C !!!!!!!!!!Attention!!!!!!!!!!!
+Access denied
+^C
+!
+line con 0
+ password 7 0822455D0A16
+ login
+ exit
+!
+line vty 0 4
+ password 7 0822455D0A16
+ login local
+ transport input ssh
+ exit
+!

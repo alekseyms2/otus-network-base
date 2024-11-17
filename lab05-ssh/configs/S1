@@ -1,0 +1,36 @@
+conf t
+!
+service password-encryption
+!
+hostname S1
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+ip ssh version 2
+no ip domain-lookup
+ip domain-name otus.ru
+!
+crypto key generate rsa general-keys modulus 2048
+!
+username sshadmin secret 5 $1$mERr$qJb.eHvBN7S590aq.dpRL.
+!
+interface Vlan1
+ ip address 192.168.1.11 255.255.255.0
+ no shutdown
+ exit
+!
+banner motd ^C !!!!!!!!!!ATTENTION!!!!!!!!!!!!!!
+ACCESS DENIED
+^C
+!
+line con 0
+ password 7 0822455D0A16
+ login
+ exit
+!
+line vty 0 4
+ password 7 0822455D0A16
+ login local
+ transport input ssh
+ exit
+!
