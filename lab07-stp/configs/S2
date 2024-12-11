@@ -1,0 +1,46 @@
+conf t
+!
+ hostname S2
+ enable secret class
+ service password-encryption
+!
+ no ip domain-lookup
+ ip domain-name otus.ru
+!
+ crypto key generate rsa general-keys modulus 2048
+ ip ssh version 2
+!
+ username sshadmin privilege 15 secret cisco
+!
+ line vty 0 4
+  password cisco
+  login local
+  transport input ssh
+  exit
+!
+ line console 0
+  password cisco
+  login
+  exit	
+!
+ banner motd ^C !!ATTENSION!! Unautorized access is prohibited^C
+!
+ interface vlan 1
+  description Management IP-Address
+  ip address 192.168.1.2 255.255.255.0
+  exit
+!
+ interface range fastEthernet 0/1-24, gigabitEthernet 0/1-2
+  shutdown
+  exit
+!
+ interface range fastEthernet 0/1-4
+   switchport mode trunk
+   exit
+!
+ interface range fastEthernet 0/2, fastEthernet 0/4
+  no shutdown
+  exit
+!
+
+
