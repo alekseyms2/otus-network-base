@@ -1,0 +1,44 @@
+configure terminal
+!
+hostname R2
+ enable secret class
+ service password-encryption
+!
+ no ip domain-lookup
+ ip domain-name otus.ru
+!
+ crypto key generate rsa general-keys modulus 2048
+ ip ssh version 2
+!
+ username sshadmin privilege 15 secret cisco
+!
+ line vty 0 4
+  password cisco
+  login local
+  transport input ssh
+  exit
+!
+ line console 0
+  password cisco
+  login
+  logging synchronous
+  exit	
+!
+ banner motd ^C !!ATTENSION!! Unautorized access is prohibited^C
+!
+interface Loopback1
+ ip address 192.168.1.1 255.255.255.0
+ ip ospf network point-to-point
+ ip ospf 56 area 0
+!
+interface GigabitEthernet0/1
+ ip address 10.53.0.2 255.255.255.0
+ ip ospf hello-interval 30
+ ip ospf 56 area 0
+!
+router ospf 56
+ router-id 2.2.2.2
+ log-adjacency-changes
+ passive-interface Loopback1
+ auto-cost reference-bandwidth 10000
+
