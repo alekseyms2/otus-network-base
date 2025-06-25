@@ -1,0 +1,22 @@
+conf t
+
+hostname R15
+
+interface Loopback1001
+ ip address 10.30.0.4 255.255.0.0
+
+interface Ethernet0/0
+ ip address 172.20.200.9 255.255.255.252
+ no shutdown
+
+interface Ethernet0/1
+ ip address 172.20.200.13 255.255.255.252
+ no shutdown
+
+interface Ethernet0/2
+ ip address 65.10.0.9 255.255.255.252
+ no shutdown
+
+interface Ethernet0/3
+ ip address 172.20.203.65 255.255.255.252
+ no shutdown

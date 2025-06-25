@@ -1,0 +1,18 @@
+conf t
+
+hostname R12
+
+interface Loopback1001
+ ip address 10.30.0.1 255.255.0.0
+
+interface Ethernet0/0
+ ip address 172.20.201.1 255.255.255.252
+
+interface Ethernet0/1
+ ip address 172.20.201.5 255.255.255.252
+
+interface Ethernet0/2
+ ip address 172.20.200.2 255.255.255.252
+
+interface Ethernet0/3
+ ip address 172.20.200.14 255.255.255.252
