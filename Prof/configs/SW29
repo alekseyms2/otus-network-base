@@ -1,0 +1,27 @@
+conf t
+
+hostname SW29
+
+vlan 100,101,700,999,1000
+
+interface range Ethernet0/0-3, Ethernet1/0-3
+ switchport mode access
+ switchport access vlan 999
+ switchport nonegotiate
+ shutdown
+
+interface Ethernet0/2
+ description ---Link to R28---
+ switchport trank allowed vlan 100,101,700
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport mode trunk
+ no shutdown
+
+interface Ethernet0/0
+ switchport access vlan 100
+ no shutdown
+
+interface Ethernet0/1
+ switchport access vlan 101
+ no shutdown 

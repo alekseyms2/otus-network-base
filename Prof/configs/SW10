@@ -1,0 +1,41 @@
+conf t
+
+hostname SW10
+
+vlan 102,103,700,999,1000
+
+interface range Ethernet0/0-3, Ethernet1/0-3
+ switchport mode access
+ switchport access vlan 999
+ switchport nonegotiate
+ shutdown
+
+interface Ethernet0/3
+ description ---Link to R16---
+ no switchport
+ ip address 25.10.0.18 255.255.255.252
+ no shutdown
+
+interface Ethernet1/0
+ description ---Link to R17---
+ no switchport
+ ip address 25.10.0.22 255.255.255.252
+ no shutdown
+
+interface Ethernet0/2
+ switchport access vlan 103
+ no shutdown
+
+interface Port-channel1
+ description ---Link to SW9---
+
+interface range Ethernet0/0-1
+ channel-group 1 mode active
+ no shutdown
+
+interface Port-channel1
+ switchport trunk allowed vlan 102,103,700
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport nonegotiate
+ switchport mode trunk 

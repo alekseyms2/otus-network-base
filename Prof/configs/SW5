@@ -1,0 +1,71 @@
+conf t
+
+hostname SW5
+
+vlan 100
+ name V100
+
+vlan 101
+ name V101
+
+Vlan 999
+ name ParkingLot
+
+Vlan 1000
+ name NATIVE VLAN
+
+
+interface Port-channel1
+ no switchport
+ ip address 172.20.201.226 255.255.255.252
+
+interface Ethernet0/0
+ switchport access vlan 999
+ switchport trunk allowed vlan 100,101,700
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport mode trunk
+ switchport nonegotiate
+
+interface Ethernet0/1
+ switchport access vlan 999
+ switchport trunk allowed vlan 100,101,700
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport mode trunk
+ switchport nonegotiate
+
+interface Ethernet0/2
+ no switchport
+ no ip address
+
+interface Ethernet0/3
+ no switchport
+ no ip address
+
+interface Ethernet1/0
+ description -- Link to R12
+ no switchport
+ ip address 172.20.201.6 255.255.255.252
+ no shutdown
+
+interface Ethernet1/1
+ description -- Link to R13
+ no switchport
+ ip address 172.20.201.10 255.255.255.252
+ no shutdown
+
+interface Ethernet1/2
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+
+interface Ethernet1/3
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+
+interface Vlan700
+ ip address 10.30.0.18 255.255.0.0
+
+

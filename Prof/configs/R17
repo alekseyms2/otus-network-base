@@ -1,0 +1,24 @@
+conf t
+
+hostname R17
+
+interface Loopback2042
+ ip address 10.30.0.6 255.255.0.0
+
+interface Ethernet0/0
+ ip address 25.10.0.13 255.255.255.252
+ description -- Link to SW9
+ no shutdown
+
+interface Ethernet0/1
+ ip address 25.10.0.2 255.255.255.252
+ description -- Link to R18 
+ no shutdown
+
+interface Ethernet0/2
+ ip address 25.10.0.21 255.255.255.252
+ description -- Link to SW10
+ no shutdown
+
+! Default gateway to R18
+ip route 0.0.0.0 0.0.0.0 25.10.0.1

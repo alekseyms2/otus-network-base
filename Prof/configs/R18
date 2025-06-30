@@ -1,0 +1,26 @@
+conf t
+
+hostname R18
+
+interface Loopback2042
+ ip address 10.30.0.7 255.255.0.0
+
+interface Ethernet0/0
+ ip address 25.10.0.5 255.255.255.252
+ description -- Link to R16
+ no shutdown
+
+interface Ethernet0/1
+ ip address 25.10.0.1 255.255.255.252
+ description -- Link to R17 
+ no shutdown
+
+interface Ethernet0/2
+ ip address 80.10.0.9 255.255.255.252
+ description -- Link to R24
+ no shutdown
+
+interface Ethernet0/3
+ ip address 80.10.0.13 255.255.255.252
+ description -- Link to R26
+ no shutdown
