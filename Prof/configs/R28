@@ -4,13 +4,68 @@ hostname R28
 
 interface Loopback1001
  ip address 10.30.0.17 255.255.0.0
+ exit
 
 interface Ethernet0/0
  ip address 80.10.0.6 255.255.255.252
- description -- Link to R26
+ description ---Link to R26---
  no shutdown
+ exit
 
 interface Ethernet0/1
  ip address 80.10.0.2 255.255.255.252
- description -- Link to R25 
+ description ---Link to R25--- 
  no shutdown
+ exit
+
+interface Ethernet0/2
+ no shutdown
+ exit
+
+interface Ethernet0/2.200
+ description ---User Vlan200---
+ encapsulation dot1Q 200
+ ip address 10.200.0.1 255.255.255.0
+ exit
+
+interface Ethernet0/2.201
+ description ---User Vlan201---
+ encapsulation dot1Q 201
+ ip address 10.201.0.1 255.255.255.0
+ exit
+
+interface Ethernet0/2.700
+ description ---MGMT VLAN700---
+ encapsulation dot1Q 700
+ ip address 10.30.0.1 255.255.255.0
+ exit
+
+interface Ethernet0/2.1000
+ description ---Native VLAN700---
+ encapsulation dot1Q 1000 native
+ exit
+
+ip dhcp excluded-address 10.200.0.1 
+ip dhcp excludes-address 10.201.0.1
+
+service dhcp
+
+ip dhcp pool DHCP_POOL_V200
+ network 10.200.0.0 255.255.255.0
+ default-router 10.200.0.1
+ domain-name chokurdah.ru
+ dns-server 10.200.0.1
+ lease 8
+
+ip dhcp pool DHCP_POOL_V201
+ network 10.201.0.0 255.255.255.0
+ default-router 10.201.0.1
+ domain-name chokurdah.ru
+ dns-server 10.201.0.1
+ lease 8
+
+interface Ethernet0/2.200-201
+ ip dhcp relay information trusted 
+ exit
+
+

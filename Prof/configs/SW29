@@ -2,26 +2,52 @@ conf t
 
 hostname SW29
 
-vlan 100,101,700,999,1000
+vlan 200,201,700,999,1000
 
-interface range Ethernet0/0-3, Ethernet1/0-3
+interface range Ethernet0/0-3
  switchport mode access
  switchport access vlan 999
  switchport nonegotiate
  shutdown
+ exit
 
 interface Ethernet0/2
  description ---Link to R28---
- switchport trank allowed vlan 100,101,700
+ switchport trunk allowed vlan 200,201,700
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 1000
  switchport mode trunk
  no shutdown
+ exit
 
 interface Ethernet0/0
- switchport access vlan 100
+ switchport access vlan 200
  no shutdown
+ exit
 
 interface Ethernet0/1
- switchport access vlan 101
- no shutdown 
+ switchport access vlan 201
+ no shutdown
+ exit
+
+interface Vlan700
+ description ---MGMT VLAN700---
+ ip address 10.30.0.2 255.255.255.0
+ no shutdown
+ exit
+
+ip dhcp snooping
+ip dhcp snooping vlan 200-201
+ip arp inspection vlan 200-201
+
+interface Ethernet0/2
+ ip dhcp snooping trust
+ ip arp inspection trust 
+ exit
+
+interface range Ethernet0/0-1, Ethernet0/3
+ ip dhcp snooping limit rate 15
+ ip arp inspection limit rate 100
+ switchport port-security
+ exit
+ 

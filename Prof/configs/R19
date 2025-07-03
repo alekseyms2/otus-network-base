@@ -8,3 +8,5 @@ interface Loopback1001
 interface Ethernet0/0
  ip address 172.20.202.34 255.255.255.252
  no shutdown
+
+ip route 0.0.0.0 0.0.0.0 172.20.202.33 name "to R14"
