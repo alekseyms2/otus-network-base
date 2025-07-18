@@ -3,22 +3,49 @@ conf t
 hostname R14
 
 interface Loopback1001
+ description ---LOOPBACK---
  ip address 10.30.0.3 255.255.0.0
+ exit
 
 interface Ethernet0/0
+ description ---Link to R12:E0/2---
  ip address 172.20.200.1 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 0
  no shutdown
+ exit
 
 interface Ethernet0/1
+ description ---Link to R13:E0/3---
  ip address 172.20.200.5 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 0
  no shutdown 
+ exit
 
 interface Ethernet0/2
+ description --- Link to ISP---
  ip address 65.10.0.1 255.255.255.252
  no shutdown
+ exit
 
 interface Ethernet0/3
+ description ---Link to R19:E0/0---
  ip address 172.20.202.33 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 101
  no shutdown
+ exit
 
 ip route 0.0.0.0 0.0.0.0 65.10.0.2 name "to R22"
+
+router ospf 1001
+ router-id 0.0.0.14
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ default-information originate
+ area 101 stub no-summary
+ exit
+

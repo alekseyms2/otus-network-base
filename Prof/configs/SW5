@@ -14,58 +14,73 @@ Vlan 999
 Vlan 1000
  name NATIVE VLAN
 
-
-interface Port-channel1
- no switchport
- ip address 172.20.201.226 255.255.255.252
-
-interface Ethernet0/0
+interface Ethernet0/0-1
  switchport access vlan 999
  switchport trunk allowed vlan 100,101,700
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 1000
  switchport mode trunk
  switchport nonegotiate
-
-interface Ethernet0/1
- switchport access vlan 999
- switchport trunk allowed vlan 100,101,700
- switchport trunk encapsulation dot1q
- switchport trunk native vlan 1000
- switchport mode trunk
- switchport nonegotiate
+ exit
 
 interface Ethernet0/2
  no switchport
  no ip address
+ channel-protocol lacp
+ channel-group 1 mode passive
+ exit
 
 interface Ethernet0/3
  no switchport
  no ip address
+ channel-protocol lacp
+ channel-group 1 mode passive
+ exit
 
 interface Ethernet1/0
- description -- Link to R12
- no switchport
- ip address 172.20.201.6 255.255.255.252
- no shutdown
-
-interface Ethernet1/1
- description -- Link to R13
+ description --- Link to R13:E0/0 ---
  no switchport
  ip address 172.20.201.10 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 10
  no shutdown
+ exit
 
-interface Ethernet1/2
+interface Ethernet1/1
+ description --- Link to R12:E0/1 ---
+ no switchport
+ ip address 172.20.201.6 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 10
+ no shutdown
+ exit
+
+interface Ethernet1/2-3
  switchport access vlan 999
  switchport mode access
  shutdown
-
-interface Ethernet1/3
- switchport access vlan 999
- switchport mode access
- shutdown
+ exit
 
 interface Vlan700
  ip address 10.30.0.18 255.255.0.0
+ exit 
+
+interface Port-channel1
+ no switchport
+ ip address 172.20.201.226 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1001 area 10
+ no shutdown
+ exit
+
+router ospf 1001
+ router-id 0.0.0.5
+ passive-interface default
+ no passive-interface Ethernet1/0
+ no passive-interface Ethernet1/1
+ no passive-interface Port-channel1
+ exit
+
+
 
 
